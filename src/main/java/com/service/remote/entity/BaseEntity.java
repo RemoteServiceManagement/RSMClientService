@@ -1,21 +1,19 @@
-package com.service.remote;
+package com.service.remote.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
- * Created by Dawid on 25.04.2018 at 21:49.
+ * Created by Dawid on 27.04.2018 at 11:16.
  */
-@Entity
+@MappedSuperclass
 @Getter
-@Setter
-public class Test implements Serializable {
+public class BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
