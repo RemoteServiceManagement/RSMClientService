@@ -3,17 +3,28 @@ option java_multiple_files = true;
 package com.service.remote.grpc;
 
 service LogDeviceService {
-    rpc getDateRangeByDeviceExternalId(DateRangeQuery) returns (DateRange);
-    rpc getLogByDeviceExternalIdAndRange(LogDeviceQuery) returns (stream LogBundle);
+    rpc getDateRangeByDeviceExternalId(DeviceBasicQuery) returns (DateRange);
+    rpc getLogs(LogDeviceQuery) returns (stream LogBundle);
+    rpc getDevicePropertyNames(DeviceBasicQuery) returns (PropertyDefinitionBundle);
 }
 
-message DateRangeQuery {
+message DeviceBasicQuery {
      string deviceExternalId = 1;
 }
 
 message LogDeviceQuery {
     string deviceExternalId = 1;
     DateRange dateRange = 2;
+    repeated string propertiesCodes = 3;
+}
+
+message PropertyDefinitionBundle {
+    repeated PropertyDefinition propertyDefinition = 1;
+}
+
+message PropertyDefinition {
+    string name = 1;
+    string code = 2;
 }
 
 message DateRange {
@@ -32,7 +43,8 @@ message LogBundle {
 
 message Property {
     string name = 1;
-    string unit = 2;
+    string code = 2;
+    string unit = 3;
     oneof value {
         string stringValue = 4;
         int64 longValue = 5;
