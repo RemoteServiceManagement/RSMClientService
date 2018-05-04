@@ -13,6 +13,7 @@ public class PropertyInstanceToPropertyMapper implements Mapper<com.service.remo
         PropertyDefinition definition = propertyInstance.getDefinition();
         Property property = Property.newBuilder()
                 .setName(definition.getName())
+                .setCode(definition.getCode())
                 .setUnit(definition.getMeasureUnit())
                 .setValueType(Property.ValueType.valueOf(definition.getValueType().name()))
                 .buildPartial();
