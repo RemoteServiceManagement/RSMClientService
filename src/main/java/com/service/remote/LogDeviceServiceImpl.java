@@ -6,12 +6,14 @@ import com.service.remote.entity.LogDeviceParameter;
 import com.service.remote.entity.QLogDeviceParameter;
 import com.service.remote.grpc.DateRange;
 import com.service.remote.grpc.DeviceBasicQuery;
+import com.service.remote.grpc.DeviceExistResponse;
 import com.service.remote.grpc.LogBundle;
 import com.service.remote.grpc.LogDeviceQuery;
 import com.service.remote.grpc.PropertyDefinition;
 import com.service.remote.grpc.PropertyDefinitionBundle;
 import com.service.remote.mapers.DateRangeMapper;
 import com.service.remote.mapers.LogDevicesToLogBundle;
+import com.service.remote.service.DeviceService;
 import com.service.remote.service.LogDeviceParameterService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.service.remote.grpc.DeviceExistResponse.newBuilder;
 import static org.springframework.data.domain.PageRequest.of;
 
 /**
@@ -36,6 +39,7 @@ import static org.springframework.data.domain.PageRequest.of;
 @Transactional
 public class LogDeviceServiceImpl extends com.service.remote.grpc.LogDeviceServiceGrpc.LogDeviceServiceImplBase {
     private final LogDeviceParameterService logDeviceParameterService;
+    private final DeviceService deviceService;
 
     @Override
     public void getDateRangeByDeviceExternalId(DeviceBasicQuery request, StreamObserver<DateRange> responseObserver) {
@@ -65,6 +69,13 @@ public class LogDeviceServiceImpl extends com.service.remote.grpc.LogDeviceServi
         List<BasicPropertyDefinitionDto> propertyDefinitions = logDeviceParameterService.getDevicePropertiesDefinition(request.getDeviceExternalId());
         List<PropertyDefinition> definitions = propertyDefinitions.stream().map(this::toPropertyDefinition).collect(Collectors.toList());
         responseObserver.onNext(PropertyDefinitionBundle.newBuilder().addAllPropertyDefinition(definitions).build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void deviceExist(DeviceBasicQuery request, StreamObserver<DeviceExistResponse> responseObserver) {
+        boolean exist = deviceService.deviceExist(request.getDeviceExternalId());
+        responseObserver.onNext(newBuilder().setExist(exist).build());
         responseObserver.onCompleted();
     }
 
