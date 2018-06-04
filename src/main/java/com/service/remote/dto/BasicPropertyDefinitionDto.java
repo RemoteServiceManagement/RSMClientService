@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class BasicPropertyDefinitionDto {
     private String name;
     private String code;
+    private String unit;
 }

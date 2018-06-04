@@ -83,6 +83,7 @@ public class LogDeviceServiceImpl extends com.service.remote.grpc.LogDeviceServi
         return PropertyDefinition.newBuilder()
                 .setName(basicPropertyDefinitionDto.getName())
                 .setCode(basicPropertyDefinitionDto.getCode())
+                .setUnit(basicPropertyDefinitionDto.getUnit())
                 .build();
     }
 
