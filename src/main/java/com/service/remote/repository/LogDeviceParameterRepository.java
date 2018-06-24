@@ -18,6 +18,6 @@ public interface LogDeviceParameterRepository extends QuerydslPredicateExecutor<
     @Query("SELECT new com.service.remote.dto.DateRange(MIN(ldp.logDate), MAX(ldp.logDate)) FROM LogDeviceParameter ldp WHERE ldp.device.externalId = ?1")
     DateRange findLogDeviceDateRange(String deviceExternalId);
 
-    @Query("SELECT DISTINCT new com.service.remote.dto.BasicPropertyDefinitionDto(pi.definition.name, pi.definition.code, pi.definition.measureUnit) FROM PropertyInstance pi WHERE pi.logDeviceParameter.device.externalId = ?1")
+    @Query("SELECT DISTINCT new com.service.remote.dto.BasicPropertyDefinitionDto(pi.definition.name, pi.definition.code, pi.definition.measureUnit, pi.definition.valueType) FROM PropertyInstance pi WHERE pi.logDeviceParameter.device.externalId = ?1")
     List<BasicPropertyDefinitionDto> getPropertyDefinition(String deviceExternalId);
 }

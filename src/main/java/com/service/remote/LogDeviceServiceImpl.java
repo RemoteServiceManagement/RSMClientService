@@ -50,6 +50,12 @@ public class LogDeviceServiceImpl extends com.service.remote.grpc.LogDeviceServi
 
     @Override
     public void getLogs(LogDeviceQuery request, StreamObserver<LogBundle> responseObserver) {
+        if (request.getPropertiesCodesList().isEmpty()) {
+            responseObserver.onNext(LogBundle.newBuilder().build());
+            responseObserver.onCompleted();
+            return;
+        }
+
         DateRange dateRange = request.getDateRange();
         Predicate predicate = QLogDeviceParameter.logDeviceParameter.device.externalId.eq(request.getDeviceExternalId())
                 .and(QLogDeviceParameter.logDeviceParameter.logDate.between(getTimeFromTimeEpoch(dateRange.getFrom()), getTimeFromTimeEpoch(dateRange.getTo())));
@@ -84,6 +90,7 @@ public class LogDeviceServiceImpl extends com.service.remote.grpc.LogDeviceServi
                 .setName(basicPropertyDefinitionDto.getName())
                 .setCode(basicPropertyDefinitionDto.getCode())
                 .setUnit(basicPropertyDefinitionDto.getUnit())
+                .setNumerical(basicPropertyDefinitionDto.isNumerical())
                 .build();
     }
 
